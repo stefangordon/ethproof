@@ -2,7 +2,6 @@
 # ethproof
 
 [![NPM version](https://img.shields.io/npm/v/ethproof.svg?style=flat)](https://npmjs.com/package/ethproof) [![NPM downloads](https://img.shields.io/npm/dm/ethproof.svg?style=flat)](https://npmjs.com/package/ethproof) [![CircleCI](https://circleci.com/gh/stefangordon/ethproof/tree/master.svg?style=shield)](https://circleci.com/gh/stefangordon/ethproof/tree/master)  [![codecov](https://codecov.io/gh/stefangordon/ethproof/branch/master/graph/badge.svg)](https://codecov.io/gh/stefangordon/ethproof)
- [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/stefangordon/donate)
 
 ## Install
 
