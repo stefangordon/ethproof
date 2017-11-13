@@ -1,0 +1,61 @@
+{
+  "name": "ethproof",
+  "version": "0.0.0",
+  "description": "A node package for server-side proof of existence (with timestamping) on the Ethereum blockchain.",
+  "repository": {
+    "url": "stefangordon/ethproof",
+    "type": "git"
+  },
+  "main": "dist/index.common.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test:cov": "jest --coverage && npm run lint",
+    "test": "npm run lint && jest",
+    "lint": "xo",
+    "prepublish": "npm run build",
+    "build": "bili --filename index"
+  },
+  "author": "stefangordon <stefan@stefangordon.com>",
+  "license": "MIT",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": [
+          [
+            "env",
+            {
+              "targets": {
+                "node": "current"
+              }
+            }
+          ]
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "bn": "^1.0.1",
+    "crypto-js": "^3.1.9-1",
+    "enum": "^2.5.0",
+    "ethereumjs-tx": "^1.3.3",
+    "ethereumjs-util": "^5.1.2",
+    "web3": "^1.0.0-beta.24"
+  },
+  "devDependencies": {
+    "jest-cli": "^19.0.0",
+    "xo": "^0.18.0",
+    "babel-preset-env": "^1.4.0",
+    "bili": "^0.17.0"
+  },
+  "xo": {
+    "space": true,
+    "envs": [
+      "jest"
+    ]
+  }
+}
