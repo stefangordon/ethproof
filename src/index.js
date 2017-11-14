@@ -7,20 +7,25 @@ import Web3 from 'web3';
 import Enum from 'enum';
 
 const networks = new Enum({
-  ropsten: 'https://ropsten.infura.io/',
-  production: 'https://mainnet.infura.io/',
+  rinkeby: 'https://rinkeby.infura.io/',
+  mainnet: 'https://mainnet.infura.io/',
   local: 'http://localhost:8545'
 }, {ignoreCase: true});
 
-export function hashDocument(input) {
+/**
+   * Generate hash of a document
+   * @param {string|buffer} document - The document as a string or buffer
+   * @return {string} Hex string representing hash
+   */
+export function hashDocument(document) {
   let words;
 
-  if (Buffer.isBuffer(input)) {
-    words = Base64.parse(input.toString('base64'));
-  } else if (typeof input === 'string') {
-    words = Base64.parse(input);
+  if (Buffer.isBuffer(document)) {
+    words = Base64.parse(document.toString('base64'));
+  } else if (typeof document === 'string') {
+    words = Base64.parse(document);
   } else {
-    throw new TypeError('Expected input to be Buffer or String');
+    throw new TypeError('Expected document to be Buffer or String');
   }
 
   const hash = sha256(words);
@@ -28,46 +33,70 @@ export function hashDocument(input) {
   return hash.toString(Hex);
 }
 
+/**
+   * Publishes a proof of existence to the Ethereum chain
+   * @param {string} privateKeyHex - Private key as a hex string
+   * @param {string} toAddress - Destination address
+   * @param {string} hash - Hash as hex string
+   * @param {string} network - local|rinkeby|mainnet
+   * @return {string} Hex string representing hash
+   */
 export function publishProof(privateKeyHex, toAddress, hash, network) {
+  if (!EthereumUtil.isValidAddress(EthereumUtil.addHexPrefix(toAddress))) {
+    throw new Error('Invalid destination address.');
+  }
+
   const web3 = new Web3(
     new Web3.providers.HttpProvider(networks.get(network).value)
   );
 
-  const gasPrice = web3.eth.getGasPrice();
-
-  const tx = buildTransaction(privateKeyHex, toAddress, hash, gasPrice.toString());
+  const tx = buildTransaction(privateKeyHex, toAddress, hash, web3);
 
   const serializedTx = EthereumUtil.addHexPrefix(tx.serialize().toString('hex'));
-  web3.eth.sendSignedTransaction(
-    serializedTx, (err, result) => {
+  web3.eth.sendRawTransaction(
+    serializedTx, (err, txHash) => {
       if (err) {
         console.log(err);
         return null;
       }
-      console.log('success');
-      return result;
+      console.log('success: ' + txHash);
+      return txHash;
     });
 }
 
-export function buildTransaction(privateKeyHex, toAddress, hash, gasPrice) {
+/**
+   * Builds a signed transaction for transmitting,
+   * primarily used internally.
+   */
+export function buildTransaction(privateKeyHex, toAddress, hash, web3) {
   const privateKeyBuffer = Buffer.from(privateKeyHex, 'hex');
-  const hashBuffer = Buffer.from(hash, 'hex');
+
+  if (!EthereumUtil.isValidPrivate(privateKeyBuffer)) {
+    throw new Error('Invalid private key.');
+  }
 
   const txParams = {
     nonce: '0x00',
-    gasPrice: '0',
-    gasLimit: '0',
+    gasPrice: '0x09184e72a000', // How should we set this?
+    gasLimit: '0x5A88',
     to: EthereumUtil.addHexPrefix(toAddress),
     value: '0x00',
-    data: hashBuffer,
-    // EIP 155 chainId - mainnet: 1, ropsten: 3
-    chainId: 3
+    data: EthereumUtil.addHexPrefix(hash),
+    // EIP 155 chainId - mainnet: 1, ropsten: 3, rinkeby: 4
+    chainId: 4
   };
 
-  const tx = new EthereumTx(txParams);
+  if (web3 !== undefined) {
+    const gas = web3.eth.estimateGas(txParams);
+    const nonce = web3.eth.getTransactionCount(
+      EthereumUtil.bufferToHex(
+        EthereumUtil.privateToAddress(privateKeyBuffer)
+      ));
+    txParams.gasLimit = web3.toHex(gas);
+    txParams.nonce = web3.toHex(nonce);
+  }
 
-  tx.gasPrice = gasPrice;
-  tx.gasLimit = tx.getBaseFee();
+  const tx = new EthereumTx(txParams);
 
   tx.sign(privateKeyBuffer);
   return tx;
