@@ -6,7 +6,7 @@
 ## Install
 
 ```bash
-npm i ethproof
+npm install --save git+https://github.com/stefangordon/ethproof.git
 ```
 
 ## Usage
@@ -15,12 +15,12 @@ npm i ethproof
 ```js
 import {hashDocument, publishProof} from 'ethproof'
 
-let hash = hashDocument(<string or Buffer>);
-let tx = publishProof(
-    privateKeyHex,
-    '0x44241d4e6a0fd2acff819478a87b7cdfe7963468',
-    hash,
-    'ropsten');
+const privateKeyHex = '774a1dee2b3a3d6c64c0e47124d3ac7522ae5c57e1fef1c4abb1b3dd63bffee6';
+const destinationAddress = '44241d4e6a0fd2acff819478a87b7cdfe7963468';
+const document = Buffer.from('Hello Crypto! ' + Math.random().toString());
+
+const documentHash = hashDocument(document);
+const txHash = publishProof(privateKeyHex, destinationAddress, documentHash, 'rinkeby');
 ```
 
 ## Contributing
