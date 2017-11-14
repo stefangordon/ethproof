@@ -11,7 +11,7 @@ npm install --save git+https://github.com/stefangordon/ethproof.git
 
 ## Usage
 
-
+ES6
 ```js
 import {hashDocument, publishProof} from 'ethproof'
 
@@ -21,6 +21,18 @@ const document = Buffer.from('Hello Crypto! ' + Math.random().toString());
 
 const documentHash = hashDocument(document);
 const txHash = publishProof(privateKeyHex, destinationAddress, documentHash, 'rinkeby');
+```
+
+ES5
+```js
+var ethproof = require('ethproof');
+
+var privateKeyHex = '774a1dee2b3a3d6c64c0e47124d3ac7522ae5c57e1fef1c4abb1b3dd63bffee6';
+var destinationAddress = '44241d4e6a0fd2acff819478a87b7cdfe7963468';
+var document = Buffer.from('Hello Crypto! ' + Math.random().toString());
+
+var documentHash = ethproof.hashDocument(document);
+var txHash = ethproof.publishProof(privateKeyHex, destinationAddress, documentHash, 'rinkeby');
 ```
 
 ## Contributing
