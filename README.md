@@ -3,6 +3,10 @@
 
 [![NPM version](https://img.shields.io/npm/v/ethproof.svg?style=flat)](https://npmjs.com/package/ethproof) [![NPM downloads](https://img.shields.io/npm/dm/ethproof.svg?style=flat)](https://npmjs.com/package/ethproof) [![CircleCI](https://circleci.com/gh/stefangordon/ethproof/tree/master.svg?style=shield)](https://circleci.com/gh/stefangordon/ethproof/tree/master)  [![codecov](https://codecov.io/gh/stefangordon/ethproof/branch/master/graph/badge.svg)](https://codecov.io/gh/stefangordon/ethproof)
 
+This module helps you publish Proof Of Existence transactions on the Ethereum blockchain.  These create a permanent record of a document hash at a specific date and time, allowing you to prove when it was originally written.
+
+For example, you may use this technique to document an invention or intellectual property to verify in the future the date at which you first created it.  The only information about your data which is stored on the chain is the documents SHA256 hash.
+
 ## Install
 
 ```bash
