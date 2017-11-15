@@ -45,6 +45,8 @@ The above examples provide no JSON RPC URI to the `publishProof(...)` call.  As 
 var txHash = publishProof(privateKeyHex, destinationAddress, documentHash, 'https://rinkeby.infura.io/');
 ```
 
+If the transaction can not be sent, an error will be thrown and can be handled with `try {...} catch (err) {...}`
+
 ## Contributing
 
 1. Fork it!

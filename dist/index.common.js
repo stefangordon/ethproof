@@ -58,15 +58,9 @@ function publishProof(privateKeyHex, toAddress, hash, rpcUri) {
   var tx = buildTransaction(privateKeyHex, toAddress, hash, web3);
 
   var serializedTx = EthereumUtil.addHexPrefix(tx.serialize().toString('hex'));
-  web3.eth.sendRawTransaction(
-    serializedTx, function (err, txHash) {
-      if (err) {
-        console.log(err);
-        return null;
-      }
-      console.log('success: ' + txHash);
-      return txHash;
-    });
+  var txHash = web3.eth.sendRawTransaction(serializedTx);
+  console.log('Transaction hash:' + txHash);
+  return txHash;
 }
 
 /**

@@ -37,6 +37,13 @@ test.skip('[publishProof] publishes a transaction to the infura chain', () => {
   expect(txHash).not.toBeNull();
 });
 
+// This test publishes a transaction that will fail
+test.only('[publishProof] publishes a transaction to the infura chain', () => {
+  const document = Buffer.from('Hello Crypto! ' + Math.random().toString());
+  const documentHash = hashDocument(document);
+  expect(() => publishProof(privateKeyHex, destinationAddress, documentHash, 'https://mainnet.infura.io/')).toThrowError();
+});
+
 test('[publishProof] fails on invalid address', () => {
   const document = Buffer.from('Hello Crypto! ' + Math.random().toString());
   const documentHash = hashDocument(document);
