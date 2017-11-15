@@ -6,7 +6,7 @@
 ## Install
 
 ```bash
-npm install --save git+https://github.com/stefangordon/ethproof.git
+npm install --save ethproof
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ const destinationAddress = '44241d4e6a0fd2acff819478a87b7cdfe7963468';
 const document = Buffer.from('Hello Crypto! ' + Math.random().toString());
 
 const documentHash = hashDocument(document);
-const txHash = publishProof(privateKeyHex, destinationAddress, documentHash, 'rinkeby');
+const txHash = publishProof(privateKeyHex, destinationAddress, documentHash);
 ```
 
 ES5
@@ -32,7 +32,13 @@ var destinationAddress = '44241d4e6a0fd2acff819478a87b7cdfe7963468';
 var document = Buffer.from('Hello Crypto! ' + Math.random().toString());
 
 var documentHash = ethproof.hashDocument(document);
-var txHash = ethproof.publishProof(privateKeyHex, destinationAddress, documentHash, 'rinkeby');
+var txHash = ethproof.publishProof(privateKeyHex, destinationAddress, documentHash);
+```
+
+The above examples provide no JSON RPC URI to the `publishProof(...)` call.  As such they default to localhost and default port.  If you would like to use Infura or any other custom URI pass it as the final parameter.  For example:
+
+```js
+var txHash = publishProof(privateKeyHex, destinationAddress, documentHash, 'https://rinkeby.infura.io/');
 ```
 
 ## Contributing

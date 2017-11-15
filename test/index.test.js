@@ -21,11 +21,19 @@ test('[publishProof] is a function', () => {
   expect(typeof publishProof).toBe('function');
 });
 
-// This test publishes a real transaction, so it is skipped by default
-test.skip('[publishProof] publishes a transaction to the chain', () => {
+// This test publishes a real transaction using default rpc URI (remove skip to test)
+test('[publishProof] publishes a transaction to the local chain', () => {
   const document = Buffer.from('Hello Crypto! ' + Math.random().toString());
   const documentHash = hashDocument(document);
-  const txHash = publishProof(privateKeyHex, destinationAddress, documentHash, 'local');
+  const txHash = publishProof(privateKeyHex, destinationAddress, documentHash);
+  expect(txHash).not.toBeNull();
+});
+
+// This test publishes a real transaction using Infura rpc URI (remove skip to test)
+test('[publishProof] publishes a transaction to the infura chain', () => {
+  const document = Buffer.from('Hello Crypto! ' + Math.random().toString());
+  const documentHash = hashDocument(document);
+  const txHash = publishProof(privateKeyHex, destinationAddress, documentHash, 'https://rinkeby.infura.io/');
   expect(txHash).not.toBeNull();
 });
 

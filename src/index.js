@@ -4,13 +4,8 @@ import Hex from 'crypto-js/enc-hex';
 import EthereumTx from 'ethereumjs-tx';
 import EthereumUtil from 'ethereumjs-util';
 import Web3 from 'web3';
-import Enum from 'enum';
 
-const networks = new Enum({
-  rinkeby: 'https://rinkeby.infura.io/',
-  mainnet: 'https://mainnet.infura.io/',
-  local: 'http://localhost:8545'
-}, {ignoreCase: true});
+const localDefault = 'http://localhost:8545';
 
 /**
    * Generate hash of a document
@@ -38,16 +33,20 @@ export function hashDocument(document) {
    * @param {string} privateKeyHex - Private key as a hex string
    * @param {string} toAddress - Destination address
    * @param {string} hash - Hash as hex string
-   * @param {string} network - local|rinkeby|mainnet
+   * @param {string} rpcUri - Optional RPC Uri.  Defaults to http://localhost:8545
    * @return {string} Hex string representing hash
    */
-export function publishProof(privateKeyHex, toAddress, hash, network) {
+export function publishProof(privateKeyHex, toAddress, hash, rpcUri) {
   if (!EthereumUtil.isValidAddress(EthereumUtil.addHexPrefix(toAddress))) {
     throw new Error('Invalid destination address.');
   }
 
+  if (!rpcUri) {
+    rpcUri = localDefault;
+  }
+
   const web3 = new Web3(
-    new Web3.providers.HttpProvider(networks.get(network).value)
+    new Web3.providers.HttpProvider(rpcUri)
   );
 
   const tx = buildTransaction(privateKeyHex, toAddress, hash, web3);
@@ -81,9 +80,7 @@ export function buildTransaction(privateKeyHex, toAddress, hash, web3) {
     gasLimit: '0x5A88',
     to: EthereumUtil.addHexPrefix(toAddress),
     value: '0x00',
-    data: EthereumUtil.addHexPrefix(hash),
-    // EIP 155 chainId - mainnet: 1, ropsten: 3, rinkeby: 4
-    chainId: 4
+    data: EthereumUtil.addHexPrefix(hash)
   };
 
   if (web3 !== undefined) {
