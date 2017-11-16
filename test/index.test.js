@@ -30,7 +30,7 @@ test.skip('[publishProof] publishes a transaction to the local chain', () => {
 });
 
 // This test publishes a real transaction using Infura rpc URI (remove skip to test)
-test.only('[publishProof] publishes a transaction to the infura chain', () => {
+test.skip('[publishProof] publishes a transaction to the infura chain', () => {
   const document = Buffer.from('Hello Crypto! ' + Math.random().toString());
   const documentHash = hashDocument(document);
   const txHash = publishProof(privateKeyHex, destinationAddress, documentHash, 'https://rinkeby.infura.io/');
