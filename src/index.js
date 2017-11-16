@@ -85,6 +85,7 @@ export function buildTransaction(privateKeyHex, toAddress, hash, web3) {
       ));
     txParams.gasLimit = web3.toHex(gas);
     txParams.nonce = web3.toHex(nonce);
+    txParams.gasPrice = web3.toHex(web3.eth.gasPrice);
   }
 
   const tx = new EthereumTx(txParams);
