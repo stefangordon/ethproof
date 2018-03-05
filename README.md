@@ -57,6 +57,10 @@ If the transaction can not be sent, an error will be thrown and can be handled w
 
 Use `npm test` to run linting and tests.
 
+## Mining
+
+If you need Ethereum to work with, consider Ethereum mining with [WinEth](https://wineth.net)
+
 ## Author
 
 **ethproof** © [Stefan Gordon](https://github.com/stefangordon), Released under the [MIT](./LICENSE) License.<br>
